@@ -36,7 +36,6 @@ const closing_lines = [
 
 // Hard coded text
 const startTxt = "The lord is awake and awaiting your summoning";
-const turnOverTxt = "Oh, my. Ah, my poor human, be gone. I have grown weary of your blathering. Come back and summon me later when you are ready for a serious conversation. Be gone!";
 const startWords = ['i summon thee', "i summon the", "i summon me", "i summoned me", "i seventy", "i summoned thee", "i summoned the", "i summon you", "i summoned you", "hello"];
 
 // Load master prompt
@@ -346,7 +345,7 @@ function speakAudio() {
             if (turnCount >= maxTurns) {
                 isSpeaking = true;
 
-                speak(turnOverTxt, (err) => {
+                speak(closing_lines[Math.floor(Math.random() * closing_lines.length)], (err) => {
                     if (err) {
                         return console.error(err);
                         isSpeaking = false;
