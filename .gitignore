@@ -1,0 +1,8 @@
+node_modules
+npm-debug.log
+.DS_Store
+/vosk-model-en-us-0.42-gigaspeech
+/vosk-model-small-en-us-0.15
+/piper
+en_GB-alan-medium.onnx
+en_GB-alan-medium.onnx.json
