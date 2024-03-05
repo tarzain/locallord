@@ -1,14 +1,11 @@
-const { spawn, ChildProcessWithoutNullStreams, exec } = require('child_process');
+const { exec } = require('child_process');
 const vosk = require('vosk');
 const axios = require('axios');
 const fs = require("fs");
 const path = require('path');
 const mic = require("mic");
-const say = require('say');
 const { env } = require('process');
-const { Readable } = require("stream");
 const Transform = require('stream').Transform;
-const http = require('http');
 
 const opening_lines = [
     "Welcome. What brings you to the sanctuary of the Lord GPT?",
@@ -49,7 +46,7 @@ try {
 // Use local LM Studio or official Open AI API (***untested*** but should work)
 var useLocal = true;
 var conversation = [];
-const maxTurns = 8;
+const maxTurns = 4;
 var turnCount = 0;
 var messagesArr = [];
 
@@ -65,7 +62,8 @@ if (!fs.existsSync(MODEL_PATH)) {
     process.exit()
 }
 
-const baseURL = useLocal ? 'http://localhost:1234/v1/' : 'https://api.openai.com/v1/';
+const baseURL = useLocal ? 'http://localhost:11434/v1/' : 'https://api.openai.com/v1/';
+const llm = useLocal ? "dolphin-mistral" : "gpt-4-turbo-preview";
 
 const OPENAI_API_KEY = env.OPENAI_API_KEY; // Replace with your OpenAI API key
 
@@ -97,7 +95,7 @@ var isSpeaking = false;
 var isGenerating = false;
 
 //const oscClient = new Client(lightingIp, 9999);
-vosk.setLogLevel(0);
+vosk.setLogLevel(1);
 const model = new vosk.Model(MODEL_PATH);
 exports.model = model;
 const rec = new vosk.Recognizer({ model: model, sampleRate: SAMPLE_RATE });
@@ -143,7 +141,7 @@ function streamFromAxios(previousMessagesArr) {
 
     const postData = {
         messages: previousMessagesArr,
-        model: "gpt-3.5-turbo-16k",
+        model: llm,
         stream: true,
         max_tokens: 100,
     };
